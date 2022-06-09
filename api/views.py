@@ -23,20 +23,24 @@ class ImageAPIView(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         queryset = Images.objects.get(uid=self.kwargs['uid']).images
         data = queryset
-
+        uid = str(Images.objects.get(uid=self.kwargs['uid']).uid)
         dat = os.path.join(PROJECT_ROOT, 'shape_predictor_68_face_landmarks.dat')
         dataLink = str(data)
         baseDir = str(MEDIA_ROOT)
-
+        cpyImg = baseDir + '/images/' + uid + 'cpy.jpg'
         link = baseDir + '/' + dataLink
 
-        img = cv2.imread(link)
+        if(os.path.exists(str(cpyImg))):
+            img = cv2.imread(cpyImg)
+        else:
+            ori = cv2.imread(link)
+            cv2.imwrite(cpyImg, ori)
+            img = cv2.imread(cpyImg)
 
         detector = dlib.get_frontal_face_detector()
         predictor = dlib.shape_predictor(dat)
 
-
-        r = 0
+        r = 255
         g = 0
         b = 0
 

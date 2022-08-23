@@ -22,23 +22,22 @@ class ImageAPIView(generics.RetrieveAPIView):
 
     def get(self, request, *args, **kwargs):
         queryset = Images.objects.get(uid=self.kwargs['uid']).images
-        data = queryset
         uid = str(Images.objects.get(uid=self.kwargs['uid']).uid)
-        dat = os.path.join(PROJECT_ROOT, 'shape_predictor_68_face_landmarks.dat')
-        dataLink = str(data)
-        baseDir = str(MEDIA_ROOT)
-        cpyImg = baseDir + '/images/' + uid + 'cpy.jpg'
-        link = baseDir + '/' + dataLink
+        face_datasets = os.path.join(PROJECT_ROOT, 'shape_predictor_68_face_landmarks.dat')
+        data_link = str(queryset)
+        base_directory = str(MEDIA_ROOT)
+        image_copy = base_directory + '/images/' + uid + 'cpy.jpg'
+        link = base_directory + '/' + data_link
 
-        if(os.path.exists(str(cpyImg))):
-            img = cv2.imread(cpyImg)
+        if(os.path.exists(str(image_copy))):
+            image = cv2.imread(image_copy)
         else:
-            ori = cv2.imread(link)
-            cv2.imwrite(cpyImg, ori)
-            img = cv2.imread(cpyImg)
+            original_image = cv2.imread(link)
+            cv2.imwrite(image_copy, original_image)
+            image = cv2.imread(image_copy)
 
         detector = dlib.get_frontal_face_detector()
-        predictor = dlib.shape_predictor(dat)
+        predictor = dlib.shape_predictor(face_datasets)
 
         r = 255
         g = 0
@@ -47,12 +46,7 @@ class ImageAPIView(generics.RetrieveAPIView):
         def createBoxLips(img, points, scale=5, masked=False, cropped=True):
             if masked:
                 mask = np.zeros_like(img)
-                # block
                 mask = cv2.fillPoly(mask, [points], (255, 255, 255))
-                # line
-                # mask = cv2.polylines(mask, [points], False, (255, 255, 255), thickness=10)
-                # img = cv2.bitwise_and(img, mask)
-                # cv2.imshow('Mask', img)
 
             if cropped:
                 bbox = cv2.boundingRect(points)
@@ -65,36 +59,33 @@ class ImageAPIView(generics.RetrieveAPIView):
                 return mask
 
         # foto
-        imgOriginal = img.copy()
-        imgGray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        faces = detector(imgGray)
+        original_image = image.copy()
+        gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        faces = detector(gray_image)
 
         for face in faces:
             x1, y1 = face.left(), face.top()
             x2, y2 = face.right(), face.bottom()
-            # tampilan bounding box
-            # imgOriginal = cv2.rectangle(img, (x1, y1), (x2, y2), (0, 255, 0), 2)
-            landmarks = predictor(imgGray, face)
-            myPoints = []
+            landmarks = predictor(gray_image, face)
+            my_points = []
             for n in range(68):
                 x = landmarks.part(n).x
                 y = landmarks.part(n).y
-                myPoints.append([x, y])
+                my_points.append([x, y])
 
-            myPoints = np.array(myPoints)
-            print(myPoints[48:61])
-            imgLips = createBoxLips(img, myPoints[48:61], 2, masked=True, cropped=False)
+            my_points = np.array(my_points)
+            image_lips = createBoxLips(image, my_points[48:61], 2, masked=True, cropped=False)
 
-            imgColorLips = np.zeros_like(imgLips)
-            imgColorLips[:] = b, g, r
-            imgColorLips = cv2.bitwise_and(imgLips, imgColorLips)
-            imgColorLips = cv2.GaussianBlur(imgColorLips, (7, 7), 10)
-            imgColorLips = cv2.addWeighted(imgOriginal, 1, imgColorLips, 0.4, 0)
-            img = imgColorLips
+            image_color_lips = np.zeros_like(image_lips)
+            image_color_lips[:] = b, g, r
+            image_color_lips = cv2.bitwise_and(image_lips, image_color_lips)
+            image_color_lips = cv2.GaussianBlur(image_color_lips, (7, 7), 10)
+            image_color_lips = cv2.addWeighted(original_image, 1, image_color_lips, 0.4, 0)
+            image = image_color_lips
 
-        cv2.imwrite(link, imgColorLips)
+        cv2.imwrite(link, image_color_lips)
 
-        return Response(data, content_type='image/jpg')
+        return Response(queryset, content_type='image/jpg')
 
 class ImageUploadView(ListAPIView):
     serializer_class = ImagesSerializer

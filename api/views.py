@@ -25,6 +25,7 @@ class ImageAPIView(generics.RetrieveAPIView):
     def get(self, request, *args, **kwargs):
         queryset = Images.objects.get(uid=self.kwargs['uid']).images
         uid = str(Images.objects.get(uid=self.kwargs['uid']).uid)
+        #Start Bikin Class baru
         face_datasets = os.path.join(PROJECT_ROOT, 'shape_predictor_68_face_landmarks.dat')
         data_link = str(queryset)
         base_directory = str(MEDIA_ROOT)
@@ -86,6 +87,7 @@ class ImageAPIView(generics.RetrieveAPIView):
             image = image_color_lips
 
         cv2.imwrite(link, image_color_lips)
+        #end bikin class baru
 
         return Response(queryset, content_type='image/jpg')
 

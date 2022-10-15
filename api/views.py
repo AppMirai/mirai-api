@@ -17,6 +17,8 @@ import dlib
 # Create your views here.
 
 
+#LSP Overload function get
+#OCP Kalau mau nambahin fitur edit mulut harus ngedit kode dibawah
 class ImageAPIView(generics.RetrieveAPIView):
     renderer_classes = [JPEGRender]
 
@@ -87,7 +89,8 @@ class ImageAPIView(generics.RetrieveAPIView):
 
         return Response(queryset, content_type='image/jpg')
 
-class ImageUploadView(ListAPIView):
+#LSP soalnya ListAPIView punya function 'get' yang gk di pake
+class ImageUploadView(ListAPIView): 
     serializer_class = ImagesSerializer
 
     def get_queryset(self):

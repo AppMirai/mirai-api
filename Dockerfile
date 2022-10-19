@@ -7,13 +7,16 @@ FROM python:3.6
 ENV PYTHONUNBUFFERED 1
 
 # create root directory for our project in the container
-RUN mkdir /music_service
+RUN mkdir /code
 
 # Set the working directory to /music_service
-WORKDIR /music_service
+WORKDIR /code
 
 # Copy the current directory contents into the container at /music_service
-ADD . /music_service/
+ADD . /code/
 
 # Install any needed packages specified in requirements.txt
+RUN apt-get -y update
+RUN apt-get -y install cmake
+RUN apt-get -y install libopenblas-dev liblapack-dev
 RUN pip install -r requirements.txt

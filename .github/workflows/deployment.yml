@@ -45,4 +45,4 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
           script: |
-            bash /home/mirai/deploy-frontend.sh
+            bash /home/mirai/deploy-api.sh

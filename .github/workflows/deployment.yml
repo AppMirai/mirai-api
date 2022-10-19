@@ -34,7 +34,7 @@ jobs:
           context: ./
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.REACTUSERNAME }}/travello-frontend:latest
+          tags: ${{ secrets.REACTUSERNAME }}/mirai-api:latest
 
 
       - name: executing remote ssh commands using password

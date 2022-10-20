@@ -19,6 +19,7 @@ ADD . /code
 RUN apt-get -y update
 RUN apt-get -y install cmake
 RUN apt-get -y install libopenblas-dev liblapack-dev
+RUN apt-get -y install ffmpeg libsm6 libxext6 
 RUN pip install -r requirements.txt
 
 EXPOSE 8000

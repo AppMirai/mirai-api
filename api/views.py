@@ -15,7 +15,7 @@ import numpy as np
 import dlib
 
 # Create your views here.
-#Comment 1
+#Comment 2
 
 #LSP Overload function get
 #OCP Kalau mau nambahin fitur edit mulut harus ngedit kode dibawah

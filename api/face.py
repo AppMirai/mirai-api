@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 
-class Face:
+class Face():
     def __init__(self, pointAwal, pointAkhir, points):
         self.pointAwal = pointAwal
         self.pointAkhir = pointAkhir

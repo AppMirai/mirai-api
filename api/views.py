@@ -15,10 +15,6 @@ import numpy as np
 import dlib
 
 # Create your views here.
-#Comment 2
-
-#LSP Overload function get
-#OCP Kalau mau nambahin fitur edit mulut harus ngedit kode dibawah
 class ImageAPIView(generics.RetrieveAPIView):
     renderer_classes = [JPEGRender]
 
@@ -27,6 +23,7 @@ class ImageAPIView(generics.RetrieveAPIView):
         uid = str(Images.objects.get(uid=self.kwargs['uid']).uid)
         #Start Bikin Class baru
         face_datasets = os.path.join(PROJECT_ROOT, 'shape_predictor_68_face_landmarks.dat')
+
         data_link = str(queryset)
         base_directory = str(MEDIA_ROOT)
         image_copy = base_directory + '/images/' + uid + 'cpy.jpg'
@@ -41,6 +38,14 @@ class ImageAPIView(generics.RetrieveAPIView):
 
         detector = dlib.get_frontal_face_detector()
         predictor = dlib.shape_predictor(face_datasets)
+
+        print('------------------- DETECTOR')
+        print(detector)
+        print('--------------------')
+
+        print('------------------ PREDITOR')
+        print(predictor)
+        print('--------------------')
 
         r = 255
         g = 0
@@ -65,6 +70,12 @@ class ImageAPIView(generics.RetrieveAPIView):
         original_image = image.copy()
         gray_image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         faces = detector(gray_image)
+        print('--------------------- IMAGE')
+        print(gray_image)
+        print('----------------------')
+        print('-------------------- FACES')
+        print(faces)
+        print('--------------------')
 
         for face in faces:
             x1, y1 = face.left(), face.top()
@@ -91,7 +102,6 @@ class ImageAPIView(generics.RetrieveAPIView):
 
         return Response(queryset, content_type='image/jpg')
 
-#LSP soalnya ListAPIView punya function 'get' yang gk di pake
 class ImageUploadView(ListAPIView): 
     serializer_class = ImagesSerializer
 

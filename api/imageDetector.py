@@ -22,7 +22,6 @@ class ImageDetector():
         self.uid = 0
         self.data_link = 0
         self.base_directory = 0
-        self.image_copy = 0
         self.link = 0
         self.face_datasets = 0
         self.detector = 0
@@ -34,7 +33,6 @@ class ImageDetector():
         self.uid = str(Images.objects.get(uid=kwargs['uid']).uid)
         self.data_link = str(self.queryset)
         self.base_directory = str(MEDIA_ROOT)
-        self.image_copy = self.base_directory + '/images/' + self.uid + 'cpy.jpg'
         self.link = self.base_directory + '/' + self.data_link
     
         
@@ -45,13 +43,7 @@ class ImageDetector():
     
     
     def detectioning(self) :
-        if(os.path.exists(str(self.image_copy))):
-            self.image = cv2.imread(self.image_copy)
-        else:
-            original_image = cv2.imread(self.link)
-            cv2.imwrite(self.image_copy, original_image)
-            self.image = cv2.imread(self.image_copy)
-
+        self.image = cv2.imread(self.link)
         self.original_image = self.image.copy()
         self.gray_image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         self.faces = self.detector(self.gray_image)

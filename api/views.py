@@ -1,19 +1,23 @@
+import os
 from distutils.log import warn
+
+from core.settings import MEDIA_ROOT
 from rest_framework import generics
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, RetrieveDestroyAPIView
 from rest_framework.response import Response
 from api.custom_renderers import JPEGRender
 from api.proses import Proses
 from images.models import Images
 from images.serializers import ImagesSerializer
+from rest_framework.generics import DestroyAPIView
 
 # Create your views here.
 class ImageAPIView(generics.RetrieveAPIView):
     renderer_classes = [JPEGRender]
 
     def get(self, request, *args, **kwargs):
-        tipeMakeUp = 'pipi'
-        warna = [255, 0, 0];
+        tipeMakeUp = Images.objects.get(uid=kwargs['uid']).tipeMakeUp
+        warna = [Images.objects.get(uid=kwargs['uid']).colorR, Images.objects.get(uid=kwargs['uid']).colorG, Images.objects.get(uid=kwargs['uid']).colorB];
         proses = Proses(warna, tipeMakeUp, request, *args, **kwargs)
 
         return Response(proses.imageDetector.queryset, content_type='image/jpg')
@@ -38,3 +42,13 @@ class ImageUploadView(ListAPIView):
                 image_serializer.errors
             )
 
+class DeleteImage(RetrieveDestroyAPIView):
+    lookup_field = 'uid'
+    serializer_class = ImagesSerializer
+    def get_queryset(self):
+        queryset = Images.objects.all()
+        return queryset
+    def delete(self, request, *args, **kwargs):
+        link = str(MEDIA_ROOT) + '/' + str(Images.objects.get(uid=self.kwargs['uid']).images)
+        os.remove(path=link)
+        return self.destroy(request, *args, **kwargs)

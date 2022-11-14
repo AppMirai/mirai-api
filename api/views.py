@@ -1,5 +1,4 @@
 import os
-from distutils.log import warn
 
 from core.settings import MEDIA_ROOT
 from rest_framework import generics
@@ -9,7 +8,6 @@ from api.custom_renderers import JPEGRender
 from api.proses import Proses
 from images.models import Images
 from images.serializers import ImagesSerializer
-from rest_framework.generics import DestroyAPIView
 
 # Create your views here.
 class ImageAPIView(generics.RetrieveAPIView):

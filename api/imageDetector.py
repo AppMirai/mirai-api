@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 import os
 
 from core.settings import PROJECT_ROOT, MEDIA_ROOT

@@ -1,4 +1,3 @@
-from ast import If
 from api.imageDetector import ImageDetector
 from api.face import Face
 

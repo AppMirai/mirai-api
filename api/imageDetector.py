@@ -40,7 +40,6 @@ class ImageDetector():
         self.detector = dlib.get_frontal_face_detector()
         self.predictor = dlib.shape_predictor(self.face_datasets)
     
-    
     def detectioning(self) :
         self.image = cv2.imread(self.link)
         self.original_image = self.image.copy()

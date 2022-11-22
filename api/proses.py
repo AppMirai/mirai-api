@@ -65,4 +65,3 @@ class Proses():
         # end image filter
     
         cv2.imwrite(self.imageDetector.link, self.face.color)
-        

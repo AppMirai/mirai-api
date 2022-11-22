@@ -6,6 +6,7 @@ from rest_framework.generics import ListAPIView, RetrieveDestroyAPIView
 from rest_framework.response import Response
 from api.custom_renderers import JPEGRender
 from api.proses import Proses
+import api.newProses as newProses
 from images.models import Images
 from images.serializers import ImagesSerializer
 
@@ -32,6 +33,10 @@ class ImageUploadView(ListAPIView):
         image_serializer = ImagesSerializer(data=request.data)
         if image_serializer.is_valid():
             image_serializer.save()
+            tipeMakeUp = str(image_serializer.data.get('tipeMakeUp'))
+            warna = [image_serializer.data.get('colorR'), image_serializer.data.get('colorG'),image_serializer.data.get('colorB')]
+            query = image_serializer.data.get('images')
+            proses = newProses.Proses(warna, tipeMakeUp, query)
             return Response(
                 image_serializer.data
             )

@@ -15,11 +15,12 @@ class ImageAPIView(generics.RetrieveAPIView):
     renderer_classes = [JPEGRender]
 
     def get(self, request, *args, **kwargs):
-        tipeMakeUp = Images.objects.get(uid=kwargs['uid']).tipeMakeUp
-        warna = [Images.objects.get(uid=kwargs['uid']).colorR, Images.objects.get(uid=kwargs['uid']).colorG, Images.objects.get(uid=kwargs['uid']).colorB];
-        proses = Proses(warna, tipeMakeUp, request, *args, **kwargs)
+        # tipeMakeUp = Images.objects.get(uid=kwargs['uid']).tipeMakeUp
+        # warna = [Images.objects.get(uid=kwargs['uid']).colorR, Images.objects.get(uid=kwargs['uid']).colorG, Images.objects.get(uid=kwargs['uid']).colorB];
+        # proses = Proses(warna, tipeMakeUp, request, *args, **kwargs)
+        queryset = Images.objects.get(uid=kwargs['uid']).images
 
-        return Response(proses.imageDetector.queryset, content_type='image/jpg')
+        return Response(queryset, content_type='image/jpg')
 
 
 class ImageUploadView(ListAPIView): 

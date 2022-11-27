@@ -27,4 +27,4 @@ EXPOSE 8000
 ENTRYPOINT ["python", "manage.py"]
 CMD ["makemigrations"]
 CMD ["migrate"]
-CMD ["runserver", "0.0.0.0:8000"]
+CMD ["runserver", "0.0.0.0:8000", "--noreload"]

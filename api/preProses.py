@@ -46,3 +46,6 @@ class preProses():
         self.original_image = self.image.copy()
         self.gray_image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
         self.faces = self.detector(self.gray_image)
+        print('=================== test')
+        print(len(self.faces))
+        print('===================')

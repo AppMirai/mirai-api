@@ -24,7 +24,4 @@ RUN pip install -r requirements.txt
 
 EXPOSE 8000
 
-ENTRYPOINT ["python", "manage.py"]
-CMD ["makemigrations"]
-CMD ["migrate"]
-CMD ["runserver", "0.0.0.0:8000"]
+CMD py manage.py makemigrations | py manage.py migrate | py manage.py collectstatic | py manage.py runserver 0.0.0.0:8000

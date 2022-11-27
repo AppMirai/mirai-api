@@ -12,7 +12,7 @@ class Proses():
         self.r = warna[0]
         self.g = warna[1]
         self.b = warna[2]
-        
+
         # start image filter
         for face in self.imageDetector.faces:
             landmarks = self.imageDetector.predictor(self.imageDetector.gray_image, face)

@@ -24,4 +24,4 @@ RUN pip install -r requirements.txt
 
 EXPOSE 8000
 
-CMD py manage.py makemigrations | py manage.py migrate | py manage.py collectstatic | py manage.py runserver 0.0.0.0:8000
+CMD python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic && python manage.py runserver 0.0.0.0:8000

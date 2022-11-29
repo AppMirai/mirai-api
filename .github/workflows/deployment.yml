@@ -47,4 +47,4 @@ jobs:
           timeout: 60s
           command_timeout: 200m
           script: |
-            bash /home/mirai/deploy-api.sh
+            bash /root/deploy-api.sh

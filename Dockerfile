@@ -1,6 +1,6 @@
 # The first instruction is what image we want to base our container on
 # We Use an official Python runtime as a parent image
-FROM python:3.7
+FROM python:3.8
 
 # The enviroment variable ensures that the python output is set straight
 # to the terminal with out buffering it first
@@ -24,7 +24,4 @@ RUN pip install -r requirements.txt
 
 EXPOSE 8000
 
-ENTRYPOINT ["python", "manage.py"]
-CMD ["makemigrations"]
-CMD ["migrate"]
-CMD ["runserver", "0.0.0.0:8000"]
+CMD python manage.py makemigrations && python manage.py migrate && python manage.py collectstatic --noinput && python manage.py runserver 0.0.0.0:8000 --noreload

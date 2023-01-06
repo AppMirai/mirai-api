@@ -1,4 +1,3 @@
-from ast import If
 from api.imageDetector import ImageDetector
 from api.face import Face
 
@@ -13,7 +12,7 @@ class Proses():
         self.r = warna[0]
         self.g = warna[1]
         self.b = warna[2]
-        
+
         # start image filter
         for face in self.imageDetector.faces:
             landmarks = self.imageDetector.predictor(self.imageDetector.gray_image, face)
@@ -66,4 +65,3 @@ class Proses():
         # end image filter
     
         cv2.imwrite(self.imageDetector.link, self.face.color)
-        

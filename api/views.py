@@ -1,5 +1,4 @@
 import os
-from distutils.log import warn
 
 from core.settings import MEDIA_ROOT
 from rest_framework import generics
@@ -7,20 +6,21 @@ from rest_framework.generics import ListAPIView, RetrieveDestroyAPIView
 from rest_framework.response import Response
 from api.custom_renderers import JPEGRender
 from api.proses import Proses
+import api.newProses as newProses
 from images.models import Images
 from images.serializers import ImagesSerializer
-from rest_framework.generics import DestroyAPIView
 
 # Create your views here.
 class ImageAPIView(generics.RetrieveAPIView):
     renderer_classes = [JPEGRender]
 
     def get(self, request, *args, **kwargs):
-        tipeMakeUp = Images.objects.get(uid=kwargs['uid']).tipeMakeUp
-        warna = [Images.objects.get(uid=kwargs['uid']).colorR, Images.objects.get(uid=kwargs['uid']).colorG, Images.objects.get(uid=kwargs['uid']).colorB];
-        proses = Proses(warna, tipeMakeUp, request, *args, **kwargs)
+        # tipeMakeUp = Images.objects.get(uid=kwargs['uid']).tipeMakeUp
+        # warna = [Images.objects.get(uid=kwargs['uid']).colorR, Images.objects.get(uid=kwargs['uid']).colorG, Images.objects.get(uid=kwargs['uid']).colorB];
+        # proses = Proses(warna, tipeMakeUp, request, *args, **kwargs)
+        queryset = Images.objects.get(uid=kwargs['uid']).images
 
-        return Response(proses.imageDetector.queryset, content_type='image/jpg')
+        return Response(queryset, content_type='image/jpg')
 
 
 class ImageUploadView(ListAPIView): 
@@ -34,6 +34,10 @@ class ImageUploadView(ListAPIView):
         image_serializer = ImagesSerializer(data=request.data)
         if image_serializer.is_valid():
             image_serializer.save()
+            tipeMakeUp = str(image_serializer.data.get('tipeMakeUp'))
+            warna = [image_serializer.data.get('colorR'), image_serializer.data.get('colorG'),image_serializer.data.get('colorB')]
+            query = image_serializer.data.get('images')
+            proses = newProses.Proses(warna, tipeMakeUp, query)
             return Response(
                 image_serializer.data
             )
